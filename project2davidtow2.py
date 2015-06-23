@@ -22,21 +22,25 @@ def format_time_list(item_list):
                     ls_items[len(ls_items) - 3],
                     ls_items[len(ls_items) - 2],
                     ls_items[len(ls_items) - 1]]
-        current_date[2].replace(':', '')
+        temp = current_date[2]
+        new_temp = temp.replace(":", "")
+        current_date[2] = new_temp
         current_date_list.append(current_date)
-        print(current_date)
-        return current_date_list
+    return current_date_list
 
 def compare_time(time_table, input_time):
     for date in time_table:
         if month_dict[date[0]] > month_dict[input_time[0]]:
-            print("%s was modified later than specified time" % (input_time[3]))
-        elif int(date[1]) > int(input_time[1]):
-            print("%s was modified later than specified time" % (input_time[3]))
-        elif int(date[2].strip(":")) > int(input_time[2].strip(":")):
-            print("%s was modified later than specified time" % (input_time[3]))
+            print("%s was modified later than specified time" % (date[3]))
+        elif (month_dict[date[0]] == month_dict[input_time[0]]) & \
+                (int(date[1]) > int(input_time[1])):
+            print("%s was modified later than specified time" % (date[3]))
+        elif (month_dict[date[0]] == month_dict[input_time[0]]) & \
+                (int(date[1]) == int(input_time[1])) & \
+                (int(date[2]) > int(input_time[2])):
+            print("%s was modified later than specified time" % (date[3]))
         else:
-            print("%s was not modified later than specified time" % (input_time[3]))
+            print("%s was not modified later than specified time" % (date[3]))
 
 
 if __name__ == '__main__':
@@ -45,14 +49,17 @@ if __name__ == '__main__':
           "for example 'Jun 3 20:43'")
     comparison_time = raw_input("enter time here:")
     comparison_time = comparison_time.split(" ")
+    temp = comparison_time[2]
+    new_temp = temp.replace(":", "")
+    comparison_time[2] = new_temp
 
     output_string = commands.getoutput("ls")
-    print(output_string)
+    #print(output_string)
     file_list = output_string.splitlines()
     find_copies(file_list)
 
     output_string = commands.getoutput("ls -l")
-    print(output_string)
+    #print(output_string)
     item_list = output_string.splitlines()
     time_table = format_time_list(item_list)
     compare_time(time_table, comparison_time)
